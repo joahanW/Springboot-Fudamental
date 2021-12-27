@@ -6,6 +6,7 @@
 package co.id.mii.springfundamental.repository;
 
 import co.id.mii.springfundamental.model.Region;
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -18,5 +19,6 @@ import org.springframework.stereotype.Repository;
 public interface RegionRepository extends JpaRepository<Region, Long> {
 
     Optional<Region> findByName(String name);
+    List<Region> findByNameContains(String name);
 
 }

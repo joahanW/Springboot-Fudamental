@@ -7,7 +7,10 @@ package co.id.mii.springfundamental.service;
 
 import co.id.mii.springfundamental.model.Region;
 import co.id.mii.springfundamental.repository.RegionRepository;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
  * @author MSI-JO
  */
 @Service
+@Slf4j
 public class RegionService {
 
     private RegionRepository regionRepository;
@@ -28,15 +32,20 @@ public class RegionService {
     }
 
     public List<Region> getAll() {
-        return regionRepository.findAll();
+        log.info(regionRepository.findByNameContains("as").toString());
+        return regionRepository.findAll().stream().sorted(Comparator.comparingLong(Region::getId)).collect(Collectors.toList());
     }
 
     public Region getById(Long id) {
 //        if (!regionRepository.findById(id).isPresent()) {
 //            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Region Not Found");
 //        }
+        
+        System.out.println(regionRepository.getById(id).getName());
+        
         return regionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Region Not Found"));
+   
     }
 
     public Region create(Region region) {
@@ -61,5 +70,4 @@ public class RegionService {
         regionRepository.deleteById(id);
         return region;
     }
-
 }
